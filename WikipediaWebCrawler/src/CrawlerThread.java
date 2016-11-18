@@ -1,13 +1,7 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,24 +11,10 @@ public class CrawlerThread extends Thread {
 
 	MainCrawler core;
 	long TAG;
-	BufferedWriter writer;
 
 	public CrawlerThread(MainCrawler core) {
 		this.core = core;
 		TAG = this.getId();
-		try
-		{
-			writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(new File(
-							"C:\\Users\\henry\\Desktop\\Crawler output\\output"
-									+ TAG + "_1.txt")), "utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void run() {
@@ -45,7 +25,7 @@ public class CrawlerThread extends Thread {
 				String page = getWebsight(urlString);
 				List<String> results = parsePage(page);
 				filter(results);
-				write(urlString, results);
+				core.write(urlString, results);
 				for (String site : results)
 					core.add(site);
 			} else {
@@ -67,25 +47,6 @@ public class CrawlerThread extends Thread {
 				a++;
 			else
 				results.remove(a);
-		}
-	}
-
-	private void write(String urlString, List<String> results)
-	{
-		try {
-			writer.write(urlString);
-			writer.write("=[");
-			for(String url:results)
-			{
-				writer.write(url);
-				writer.write(",");
-			}
-			writer.write("]");
-			writer.newLine();
-			writer.newLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 

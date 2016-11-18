@@ -17,41 +17,49 @@ public class Bimap<K,V>{
 	}
 
 	
-	public boolean containsKey(Object key)
+	public boolean containsKey(K key)
 	{
 		return fmap.containsKey(key);
 	}
 
 	
-	public boolean containsValue(Object value)
+	public boolean containsValue(V value)
 	{
 		return bmap.containsKey(value);
 	}
 
-	public V getFromKey(Object key)
+	public V getFromKey(K key)
 	{
 		return fmap.get(key);
 	}
-	public K getFromValue(Object value)
+	public K getFromValue(V value)
 	{
 		return bmap.get(value);
 	}
 	
 	public void put(K key, V value)
 	{
+		removeKey(key);
+		removeVal(value);
 		fmap.put(key, value);
 		bmap.put(value, key);
 	}
 
-	public V removeKey(Object key)
+	public V removeKey(K key)
 	{
 		V val = fmap.remove(key);
 		bmap.remove(val);
 		return val;
 	}
+	public K removeVal(V value)
+	{
+		K key = bmap.remove(value);
+		fmap.remove(key);
+		return key;
+	}
 
 	public void clear() {
 		fmap.clear();
 		bmap.clear();
-	}	
+	}
 }
